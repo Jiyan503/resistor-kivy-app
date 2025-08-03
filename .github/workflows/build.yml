@@ -10,23 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Show environment info
+      - name: Install system dependencies
         run: |
-          python --version
-          pip --version
-          uname -a
-          env
+          sudo apt-get update
+          sudo apt-get install -y \
+            python3-pip \
+            git \
+            openjdk-17-jdk \
+            zip \
+            unzip \
+            build-essential \
+            autoconf \
+            automake \
+            libtool \
+            pkg-config \
+            libffi-dev \
+            libssl-dev \
+            python3-setuptools
 
-      - name: List project files
-        run: ls -al
-
-      - name: Install dependencies
+      - name: Install Buildozer and dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install kivy buildozer
+          python3 -m pip install --upgrade pip setuptools wheel
+          pip3 install --upgrade cython
+          pip3 install buildozer kivy
 
-      - name: Run Buildozer (verbose)
-        run: buildozer -v android debug
+      - name: Run Buildozer
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+        run: |
+          buildozer android debug
