@@ -23,8 +23,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install kivy buildozer
 
-      - name: Build APK
+      - name: Show Python and pip version
         run: |
-          buildozer android debug
+          python --version
+          pip --version
 
-      # Add artifact upload here if you want to save the APK
+      - name: Run buildozer with debug
+        run: |
+          buildozer -v android debug
